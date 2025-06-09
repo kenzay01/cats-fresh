@@ -31,6 +31,9 @@ export default function MainBanner() {
                 height={400}
                 className="w-full h-[475px] rounded-3xl shadow-2xl object-cover"
                 priority
+                sizes="(max-width: 768px) 100vw, 50vw"
+                loading="eager"
+                quality={50}
               />
             </div>
           </div>
