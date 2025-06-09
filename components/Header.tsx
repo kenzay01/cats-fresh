@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import fullLogo from "@/public/full_logo.png";
@@ -16,6 +17,8 @@ export default function Header() {
   const locale = useCurrentLanguage() as Locale;
   const { dict } = useDictionary(locale);
   const headerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -25,12 +28,8 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   };
 
-  const handleScroll = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
-  ) => {
-    e.preventDefault();
-    const target = document.querySelector(href);
+  const scrollToElement = (targetId: string) => {
+    const target = document.querySelector(targetId);
     if (target && headerRef.current) {
       const headerHeight = headerRef.current.offsetHeight;
       const targetPosition = (target as HTMLElement).offsetTop - headerHeight;
@@ -39,8 +38,40 @@ export default function Header() {
         behavior: "smooth",
       });
     }
+  };
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    e.preventDefault();
+    const targetId = href.replace("#", "#");
+    const isHomePage = pathname === `/${locale}` || pathname === "/";
+
+    if (isHomePage) {
+      scrollToElement(targetId);
+    } else {
+      router.push(`/${locale}${href}`);
+    }
+
     closeMobileMenu();
   };
+
+  useEffect(() => {
+    const handleHashScroll = () => {
+      if (window.location.hash) {
+        setTimeout(() => {
+          scrollToElement(window.location.hash);
+        }, 100);
+      }
+    };
+    handleHashScroll();
+    window.addEventListener("hashchange", handleHashScroll);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashScroll);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,10 +93,10 @@ export default function Header() {
   }
 
   const navLinks = [
-    { name: dict.nav.why_brand, href: "#why-cats-fresh" },
-    { name: dict.nav.products, href: "#products" },
-    { name: dict.nav.about, href: "#about" },
-    { name: dict.nav.contact, href: "#contact" },
+    { name: dict.nav.why_brand, href: `#why-cats-fresh` },
+    { name: dict.nav.products, href: `#products` },
+    { name: dict.nav.about, href: `#about` },
+    { name: dict.nav.contact, href: `#contact` },
   ];
 
   return (
@@ -103,7 +134,7 @@ export default function Header() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      onClick={(e) => handleScroll(e, link.href)}
+                      onClick={(e) => handleNavClick(e, link.href)}
                       className="text-[var(--color-cream)] hover:text-[var(--color-lime-green)] px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:bg-black/10"
                     >
                       {link.name}
@@ -147,7 +178,7 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  onClick={(e) => handleScroll(e, link.href)}
+                  onClick={(e) => handleNavClick(e, link.href)}
                   className="text-[var(--color-cream)] hover:text-[var(--color-lime-green)] block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
                 >
                   {link.name}
