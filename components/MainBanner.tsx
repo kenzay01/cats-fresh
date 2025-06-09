@@ -72,7 +72,7 @@ export default function MainBanner() {
               </ul>
             </div>
             <Link
-              href="#products"
+              href="#why-cats-fresh"
               className="inline-block bg-[var(--color-lime-green)] text-[var(--color-forest-green)] font-semibold px-6 py-3 rounded-md hover:bg-[var(--color-burnt-orange)] hover:text-[var(--color-cream)] transition-colors duration-300 mb-10"
             >
               {dict?.banner.cta || "Дізнатися більше"}
