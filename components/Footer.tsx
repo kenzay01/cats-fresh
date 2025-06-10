@@ -33,7 +33,7 @@ export default function Footer() {
             </div>
 
             <div className="space-y-2 text-sm lg:text-base">
-              <p>ТОВ "КетсФреш Україна"</p>
+              <p>ТОВ `КетсФреш Україна`</p>
               <p>49000, м. Тест</p>
               <div className="flex items-center justify-center lg:justify-start gap-2">
                 <FaPhone className="text-[var(--color-lime-green)]" />
