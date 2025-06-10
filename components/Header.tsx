@@ -95,8 +95,8 @@ export default function Header() {
   const navLinks = [
     { name: dict.nav.why_brand, href: `#why-cats-fresh` },
     { name: dict.nav.products, href: `#products` },
-    { name: dict.nav.about, href: `#about` },
-    { name: dict.nav.contact, href: `#contact` },
+    { name: dict.nav.comments, href: `#comments` },
+    // { name: dict.nav.contact, href: `#contact` },
   ];
 
   return (

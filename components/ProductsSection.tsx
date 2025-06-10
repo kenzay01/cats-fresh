@@ -51,7 +51,7 @@ export default function ProductsSection() {
   return (
     <section
       id="products"
-      className="py-6 bg-gradient-to-b from-[var(--color-cream)] to-white"
+      className="py-6 bg-gradient-to-b from-[var(--color-cream)] to-white pb-12"
     >
       <div className="max-w-7xl mx-auto pb-8 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-4">
@@ -112,7 +112,7 @@ export default function ProductsSection() {
           {dict?.products?.promotion?.description ||
             "Оптові замовлення від 6 штук з автоматичною знижкою"}
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto ">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-8">
           <div className="bg-white/20 rounded-lg p-4">
             <div className="text-2xl font-bold">
               {dict?.products?.promotion?.standard_quantity || "1-5 шт"}
@@ -121,7 +121,7 @@ export default function ProductsSection() {
               {dict?.products?.promotion?.standard_price || "Звичайна ціна"}
             </div>
           </div>
-          <div className="bg-white/30 rounded-lg p-4 border-2 border-white">
+          <div className="bg-white/30 rounded-lg p-4 border-2 border-[var(--color-cream)]">
             <div className="text-2xl font-bold">
               {dict?.products?.promotion?.wholesale_quantity || "6+ шт"}
             </div>
@@ -131,6 +131,10 @@ export default function ProductsSection() {
             </div>
           </div>
         </div>
+        <p className="text-2xl font-bold underline-offset-2 underline decoration-[var(--color-burnt-orange)]">
+          {dict?.products?.promotion?.promotion_accent ||
+            "Найвигідніша пропозиція на ринку!"}
+        </p>
       </div>
     </section>
   );

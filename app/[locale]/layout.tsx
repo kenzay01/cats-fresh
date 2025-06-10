@@ -5,6 +5,7 @@ import { locales } from "@/i18n/config";
 import { Metadata } from "next";
 // import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ClientHeaderWrapper from "@/components/ClientHeaderWrapped";
+import ClientFooterWrapper from "@/components/ClientFooterWrapped";
 import "../globals.css";
 // import { usePathname } from "next/navigation";
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
@@ -34,6 +35,7 @@ export default async function RootLayout({
       <body className={inter.className}>
         <ClientHeaderWrapper />
         <main>{children}</main>
+        <ClientFooterWrapper />
       </body>
     </html>
   );

@@ -73,7 +73,7 @@ export default function WhyCatsFresh() {
 
   return (
     <section
-      className="relative w-full py-8 pb-2 bg-[var(--color-cream)]"
+      className="relative w-full lg:py-8 pb-2 lg:pb-16 bg-[var(--color-cream)]"
       id="why-cats-fresh"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -125,10 +125,10 @@ export default function WhyCatsFresh() {
           })}
         </div>
 
-        <div className="text-center mt-14">
+        <div className="text-center mt-7 lg:mt-14">
           <div className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-[var(--color-forest-green)]">
             <FaLeaf size={24} className="mr-3 text-[var(--color-lime-green)]" />
-            <span className="text-lg font-semibold text-[var(--color-cream)]">
+            <span className="text-sm lg:text-lg font-semibold text-[var(--color-cream)]">
               {dict?.why_cats_fresh?.slogan ||
                 "Природний вибір для турботливих власників"}
             </span>

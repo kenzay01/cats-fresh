@@ -93,7 +93,7 @@ export default function ProductPage() {
   );
 
   return (
-    <section className="pt-8 ">
+    <section className="py-8 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col lg:flex-row">
           <div className="relative w-full h-80 sm:h-96 lg:h-auto lg:w-1/2 lg:min-h-[400px]  bg-gradient-to-br from-[var(--color-lime-green)]/10 to-[var(--color-burnt-orange)]/10">
@@ -102,7 +102,7 @@ export default function ProductPage() {
               alt={product.name[locale]}
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-contain lg:object-cover"
+              className=" object-cover lg:object-cover"
               priority
             />
             {isWholesale && (

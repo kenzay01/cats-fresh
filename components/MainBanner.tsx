@@ -12,7 +12,7 @@ export default function MainBanner() {
   const { dict } = useDictionary(locale);
 
   return (
-    <section className="relative w-full py-10 pb-20">
+    <section className="relative w-full py-10 lg:pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-0">
         <h1 className="text-4xl md:text-5xl font-bold text-[var(--color-forest-green)] mb-6 text-center lg:text-left">
           {dict?.banner.title ||
