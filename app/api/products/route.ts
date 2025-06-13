@@ -17,6 +17,7 @@ export async function GET() {
       products: [
         {
           id: "cats-fresh",
+          idNumber: 1,
           name: {
             uk: "Cats Fresh - Комкуючий наповнювач з тофу",
             ru: "Cats Fresh - Комкующий наполнитель из тофу",
