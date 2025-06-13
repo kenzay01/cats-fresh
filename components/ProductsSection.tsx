@@ -7,7 +7,7 @@ import { Locale } from "@/i18n/config";
 import Link from "next/link";
 import type { Product } from "@/types/product";
 import Image from "next/image";
-import { getImageForProduct } from "@/hooks/getImageForProduct";
+import { getImageForProduct } from "@/hooks/getImagesForProduct";
 
 export default function ProductsSection() {
   const [products, setProducts] = useState<Product[]>([]);

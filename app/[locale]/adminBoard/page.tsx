@@ -36,12 +36,12 @@ const AdminPanel = () => {
 
   const [tempData, setTempData] = useState<Product>({
     id: "",
+    idNumber: products.length + 1,
     name: { uk: "", ru: "" },
     description: { uk: "", ru: "" },
     price: { single: 0, from_6: 0 },
   });
 
-  // Завантажити товари з API
   const fetchProducts = async () => {
     try {
       setLoading(true);

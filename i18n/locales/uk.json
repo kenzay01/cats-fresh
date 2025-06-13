@@ -50,7 +50,8 @@
     "total_price": "Разом ({quantity} шт):",
     "buy_now": "Купити зараз",
     "info_text": "Отримуйте інфо про знижки та нові товари в нашому боті",
-    "wholesale_active": "🎉 Оптова знижка активна!"
+    "wholesale_active": "🎉 Оптова знижка активна!",
+    "notFound_poduct": "Товар не знайдено"
   },
   "why_cats_fresh": {
     "title": "Чому Cats Fresh?",

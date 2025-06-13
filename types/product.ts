@@ -1,5 +1,6 @@
 export interface Product {
   id: string;
+  idNumber: number;
   name: {
     uk: string;
     ru: string;

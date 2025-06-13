@@ -9,7 +9,7 @@ export default function NotFound() {
   const { dict } = useDictionary(locale);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[var(--color-cream)] to-white flex items-center justify-center">
+    <div className="h-screen bg-gradient-to-b from-[var(--color-cream)] to-white flex items-center justify-center">
       <div className="text-center">
         <h1 className="text-4xl font-bold text-[var(--color-forest-green)] mb-4">
           {dict?.notFound?.title || "404 - Сторінка не знайдена"}
