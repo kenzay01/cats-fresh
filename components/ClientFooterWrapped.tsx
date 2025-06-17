@@ -7,6 +7,6 @@ export default function ClientHeaderWrapper() {
   const pathname = usePathname();
 
   const currentLanguage = useCurrentLanguage();
-  console.log(pathname);
+  // console.log(pathname);
   return pathname !== `/${currentLanguage}/adminBoard` ? <Footer /> : null;
 }

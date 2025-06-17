@@ -172,8 +172,8 @@ export default function Header() {
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden" id="mobile-menu">
-            <div className="px-2 pt-2 bg-black/10 rounded-t-lg mt-2 backdrop-blur-sm">
+          <div className="lg:hidden pb-4" id="mobile-menu">
+            <div className="px-2 pt-2 bg-black/10 rounded-lg mt-2 backdrop-blur-sm">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
