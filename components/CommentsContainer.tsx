@@ -3,7 +3,10 @@
 import { useState, useEffect } from "react";
 import CommentItem from "./CommentItem";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
-import testPic from "@/public/images/cats-fresh.png";
+// import testPic from "@/public/images/cats-fresh.png";
+import comment1 from "@/public/comments/comment1.jpg";
+import comment2 from "@/public/comments/comment2.jpg";
+import comment3 from "@/public/comments/comment3.jpg";
 import { useCurrentLanguage } from "@/hooks/getCurrentLanguage";
 import { useDictionary } from "@/hooks/getDictionary";
 import { Locale } from "@/i18n/config";
@@ -14,38 +17,24 @@ export default function CommentsContainer() {
   const comments = [
     {
       id: 1,
-      name: "Іван",
-      text: "Чудовий сервіс! Наповнювач дійсно натуральний і добре вбирає запахи.",
+      name: "Наталія Мельник",
+      text: "Вітаю! Вперше замовила цей наповнювач і чесно, була вражена, навіть при тому що раніше користувалася саме преміум пакетами. Комкується чудово і дійсно легко прибирати, а це прям мій головний біль був завжди з деревними. Тепер я ваш постійний клієнт🤗",
       rating: 5,
-      image: testPic,
+      image: comment1,
     },
     {
       id: 2,
-      name: "Марія",
-      text: "Дуже задоволена покупкою. Кішка швидко звикла до нового наповнювача.",
-      rating: 4,
-      image: testPic,
+      name: "Марія Юрченко",
+      text: "Я б поставила 5/5, одразу вже замовила оптом після першої проби. Хотіла б відзначити ще компактність і зручність, перший раз пробувала саме у вакуумній упаковці, не рветься, не сиплеться. Ну і ще не мало важливо, що ціна дуже приємна і вистачає довше ніж деякі по 5 кг. Дякую команді Кетс Фреш.",
+      rating: 5,
+      image: comment2,
     },
     {
       id: 3,
-      name: "Олексій",
-      text: "Екологічно чистий продукт за розумною ціною. Рекомендую!",
+      name: "Наталія Ткачук",
+      text: "Дуже задоволена покупкою. Кішка швидко звикла до нового наповнювача, і швидко вбирає запахи.",
       rating: 5,
-      image: testPic,
-    },
-    {
-      id: 4,
-      name: "Світлана",
-      text: "Відмінна якість, легко прибирати. Буду замовляти ще.",
-      rating: 4,
-      image: testPic,
-    },
-    {
-      id: 5,
-      name: "Андрій",
-      text: "Найкращий наповнювач, який я пробував. Котики задоволені!",
-      rating: 5,
-      image: testPic,
+      image: comment3,
     },
   ];
 
@@ -114,11 +103,11 @@ export default function CommentsContainer() {
           </div>
 
           {/* Navigation buttons - hidden on mobile if only one slide visible */}
-          {(isDesktop || comments.length > 1) && (
+          {comments.length > slidesToShow && (
             <>
               <button
                 onClick={prevSlide}
-                className="absolute left-2 lg:left-4 top-1/2 transform -translate-y-1/2 bg-[var(--color-lime-green)] text-[var(--color-forest-green)] p-2 lg:p-3 rounded-full shadow-lg hover:bg-[var(--color-burnt-orange)] hover:text-[var(--color-cream)] transition-colors duration-300 z-10 border-2 border-[var(--color-forest-green)]"
+                className="absolute -left-3 lg:left-4 top-1/2 transform -translate-y-1/2 bg-[var(--color-lime-green)] text-[var(--color-forest-green)] p-2 lg:p-3 rounded-full shadow-lg hover:bg-[var(--color-burnt-orange)] hover:text-[var(--color-cream)] transition-colors duration-300 z-10 border-2 border-[var(--color-forest-green)]"
                 aria-label="Попередній відгук"
               >
                 <FaChevronLeft size={isDesktop ? 20 : 16} />
@@ -126,29 +115,27 @@ export default function CommentsContainer() {
 
               <button
                 onClick={nextSlide}
-                className="absolute right-2 lg:right-4 top-1/2 transform -translate-y-1/2 bg-[var(--color-lime-green)] text-[var(--color-forest-green)] p-2 lg:p-3 rounded-full shadow-lg hover:bg-[var(--color-burnt-orange)] hover:text-[var(--color-cream)] transition-colors duration-300 z-10 border-2 border-[var(--color-forest-green)]"
+                className="absolute -right-3 lg:right-4 top-1/2 transform -translate-y-1/2 bg-[var(--color-lime-green)] text-[var(--color-forest-green)] p-2 lg:p-3 rounded-full shadow-lg hover:bg-[var(--color-burnt-orange)] hover:text-[var(--color-cream)] transition-colors duration-300 z-10 border-2 border-[var(--color-forest-green)]"
                 aria-label="Наступний відгук"
               >
                 <FaChevronRight size={isDesktop ? 20 : 16} />
               </button>
+              <div className="flex justify-center mt-6 lg:mt-8 space-x-2">
+                {Array.from({ length: maxIndex + 1 }, (_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`w-2 h-2 lg:w-3 lg:h-3 rounded-full transition-colors duration-300 ${
+                      currentIndex === index
+                        ? "bg-[var(--color-burnt-orange)]"
+                        : "bg-[var(--color-lime-green)]"
+                    }`}
+                    aria-label={`Перейти до відгуку ${index + 1}`}
+                  />
+                ))}
+              </div>
             </>
           )}
-
-          {/* Dots Navigation */}
-          <div className="flex justify-center mt-6 lg:mt-8 space-x-2">
-            {Array.from({ length: maxIndex + 1 }, (_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`w-2 h-2 lg:w-3 lg:h-3 rounded-full transition-colors duration-300 ${
-                  currentIndex === index
-                    ? "bg-[var(--color-burnt-orange)]"
-                    : "bg-[var(--color-lime-green)]"
-                }`}
-                aria-label={`Перейти до відгуку ${index + 1}`}
-              />
-            ))}
-          </div>
         </div>
       </div>
     </section>
