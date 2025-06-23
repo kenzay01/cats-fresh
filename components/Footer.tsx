@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import {
-  FaFacebook,
+  // FaFacebook,
   FaInstagram,
   FaTelegram,
   FaPhone,
-  FaEnvelope,
+  // FaEnvelope,
 } from "react-icons/fa6";
 import { useCurrentLanguage } from "@/hooks/getCurrentLanguage";
 import { useDictionary } from "@/hooks/getDictionary";
