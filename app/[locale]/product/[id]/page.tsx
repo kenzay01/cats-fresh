@@ -48,7 +48,7 @@ export default function ProductPage() {
 
   const calculatePrice = (product: Product, quantity: number) => {
     let unitPrice;
-    let discountLevel = "none"; // none, medium, high
+    let discountLevel = "none";
 
     if (quantity >= 80 && product.price.from_80) {
       unitPrice = product.price.from_80;
@@ -68,7 +68,7 @@ export default function ProductPage() {
     };
   };
 
-  const getDiscountInfo = (discountLevel: string, quantity: number) => {
+  const getDiscountInfo = (discountLevel: string) => {
     switch (discountLevel) {
       case "high":
         return {
@@ -81,7 +81,7 @@ export default function ProductPage() {
         };
       case "medium":
         return {
-          badge: "🎉 Оптова знижка активна!",
+          badge: dict?.product_page?.wholesale_active,
           badgeColor: "bg-[var(--color-burnt-orange)]",
           text:
             dict?.product_page?.wholesale_active || "🎉 Оптова знижка активна!",
@@ -136,7 +136,7 @@ export default function ProductPage() {
     quantity
   );
 
-  const discountInfo = getDiscountInfo(discountLevel, quantity);
+  const discountInfo = getDiscountInfo(discountLevel);
   const productImages = getImagesForProduct(product.id);
 
   return (
