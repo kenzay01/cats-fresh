@@ -27,8 +27,9 @@ export async function GET() {
             ru: "Экологический наполнитель из тофу для кошачьего туалета",
           },
           price: {
-            single: 280,
-            from_6: 250,
+            single: 250,
+            from_8: 180,
+            from_80: 150,
           },
         },
       ],

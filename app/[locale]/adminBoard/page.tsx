@@ -39,7 +39,7 @@ const AdminPanel = () => {
     idNumber: products.length + 1,
     name: { uk: "", ru: "" },
     description: { uk: "", ru: "" },
-    price: { single: 0, from_6: 0 },
+    price: { single: 0, from_8: 0, from_80: 0 },
   });
 
   const fetchProducts = async () => {
@@ -138,7 +138,7 @@ const AdminPanel = () => {
   //     id: `product-${Date.now()}`,
   //     name: { uk: "Новий товар", ru: "Новый товар" },
   //     description: { uk: "Опис товару", ru: "Описание товара" },
-  //     price: { single: 0, from_6: 0 },
+  //     price: { single: 0, from_8: 0 },
   //   };
   //   isSaved.current = false;
   //   setIsNewProduct(true);
@@ -437,17 +437,17 @@ const AdminPanel = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-[var(--color-forest-green)] mb-2">
-                      Ціна за від 6 шт (грн)
+                      Ціна за від 8 шт (грн)
                     </label>
                     <input
                       type="number"
-                      value={tempData.price.from_6}
+                      value={tempData.price.from_8}
                       onChange={(e) =>
                         setTempData({
                           ...tempData,
                           price: {
                             ...tempData.price,
-                            from_6: Number(e.target.value),
+                            from_8: Number(e.target.value),
                           },
                         })
                       }
@@ -457,10 +457,32 @@ const AdminPanel = () => {
                     />
                   </div>
 
-                  <div className="bg-[var(--color-lime-green)]/10 rounded-xl p-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-forest-green)] mb-2">
+                      Ціна за від 80 шт (грн)
+                    </label>
+                    <input
+                      type="number"
+                      value={tempData.price.from_80}
+                      onChange={(e) =>
+                        setTempData({
+                          ...tempData,
+                          price: {
+                            ...tempData.price,
+                            from_80: Number(e.target.value),
+                          },
+                        })
+                      }
+                      className="w-full px-4 py-3 border border-[var(--color-lime-green)]/30 rounded-xl focus:ring-2 focus:ring-[var(--color-forest-green)] focus:border-transparent transition-all"
+                      min="0"
+                      step="0.01"
+                    />
+                  </div>
+
+                  {/* <div className="bg-[var(--color-lime-green)]/10 rounded-xl p-4">
                     <p className="text-sm text-[var(--color-forest-green)]">
                       <strong>Економія при покупці ящика:</strong>{" "}
-                      {(tempData.price.single - tempData.price.from_6).toFixed(
+                      {(tempData.price.single - tempData.price.from_8).toFixed(
                         2
                       )}{" "}
                       грн
@@ -468,13 +490,13 @@ const AdminPanel = () => {
                     <p className="text-sm text-[var(--color-forest-green)] mt-1">
                       <strong>Знижка:</strong>{" "}
                       {(
-                        ((tempData.price.single - tempData.price.from_6) /
+                        ((tempData.price.single - tempData.price.from_8) /
                           tempData.price.single) *
                         100
                       ).toFixed(1)}
                       %
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

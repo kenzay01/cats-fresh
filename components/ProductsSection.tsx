@@ -31,6 +31,32 @@ export default function ProductsSection() {
     }
   };
 
+  const calculateDiscount = (originalPrice: number, discountPrice: number) => {
+    return Math.round(((originalPrice - discountPrice) / originalPrice) * 100);
+  };
+
+  const sampleProduct = products[0];
+  const getPricingInfo = () => {
+    if (!sampleProduct) return null;
+
+    const singlePrice = sampleProduct.price.single;
+    const from8Price = sampleProduct.price.from_8;
+    const from80Price = sampleProduct.price.from_80;
+
+    const discount8 = calculateDiscount(singlePrice, from8Price);
+    const discount80 = calculateDiscount(singlePrice, from80Price);
+
+    return {
+      single: Math.round(singlePrice),
+      from8: Math.round(from8Price),
+      from80: Math.round(from80Price),
+      discount8,
+      discount80,
+    };
+  };
+
+  const pricingInfo = getPricingInfo();
+
   if (loading) {
     return (
       <section
@@ -110,27 +136,57 @@ export default function ProductsSection() {
         </h3>
         <p className="text-lg mb-4">
           {dict?.products?.promotion?.description ||
-            "Оптові замовлення від 6 штук з автоматичною знижкою"}
+            "Оптові замовлення від 8 штук з автоматичною знижкою"}
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-8">
-          <div className="bg-white/20 rounded-lg p-4">
-            <div className="text-2xl font-bold">
-              {dict?.products?.promotion?.standard_quantity || "1-5 шт"}
+
+        {pricingInfo && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-8">
+            {/* Звичайна ціна */}
+            <div className="bg-white/20 rounded-lg p-4">
+              <div className="text-2xl font-bold">1 шт</div>
+              <div className="text-lg font-semibold mb-1">
+                {pricingInfo.single} грн/шт
+              </div>
+              <div className="text-sm">
+                {dict?.products?.promotion?.standard_price || "Звичайна ціна"}
+              </div>
             </div>
-            <div className="text-sm">
-              {dict?.products?.promotion?.standard_price || "Звичайна ціна"}
+
+            {/* Оптова ціна */}
+            <div className="bg-white/30 rounded-lg p-4 border-2 border-[var(--color-cream)]">
+              <div className="text-2xl font-bold">8+ шт</div>
+              <div className="text-lg font-semibold mb-1">
+                {pricingInfo.from8} грн/шт
+              </div>
+              <div className="text-sm flex items-center justify-center gap-1">
+                <span className="bg-[var(--color-burnt-orange)] text-white px-2 py-1 rounded text-xs font-bold">
+                  -{pricingInfo.discount8}%
+                </span>
+                <span>{dict?.products?.promotion.wholesale_discount}</span>
+              </div>
+            </div>
+
+            {/* Максимальна знижка */}
+            <div className="bg-white/40 rounded-lg p-4 border-2 border-[var(--color-burnt-orange)] relative overflow-hidden">
+              <div className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold animate-pulse">
+                🔥 ТОП
+              </div>
+              <div className="text-2xl font-bold">80+ шт</div>
+              <div className="text-lg font-semibold mb-1">
+                {pricingInfo.from80} грн/шт
+              </div>
+              <div className="text-sm flex items-center justify-center gap-1">
+                <span className="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">
+                  -{pricingInfo.discount80}%
+                </span>
+                <span className="font-semibold">
+                  {dict?.product_page.badge_max}
+                </span>
+              </div>
             </div>
           </div>
-          <div className="bg-white/30 rounded-lg p-4 border-2 border-[var(--color-cream)]">
-            <div className="text-2xl font-bold">
-              {dict?.products?.promotion?.wholesale_quantity || "6+ шт"}
-            </div>
-            <div className="text-sm">
-              {dict?.products?.promotion?.wholesale_discount ||
-                "Оптова знижка ✨"}
-            </div>
-          </div>
-        </div>
+        )}
+
         <p className="text-2xl font-bold underline-offset-2 underline decoration-[var(--color-burnt-orange)]">
           {dict?.products?.promotion?.promotion_accent ||
             "Найвигідніша пропозиція на ринку!"}

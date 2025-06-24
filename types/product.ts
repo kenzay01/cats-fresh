@@ -11,6 +11,7 @@ export interface Product {
   };
   price: {
     single: number;
-    from_6: number;
+    from_8: number;
+    from_80: number;
   };
 }

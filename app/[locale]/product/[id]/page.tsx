@@ -17,6 +17,7 @@ export default function ProductPage() {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [isOrdering, setIsOrdering] = useState(false);
+  const [editingQuantity, setEditingQuantity] = useState(false);
   const locale = useCurrentLanguage() as Locale;
   const { dict } = useDictionary(locale);
 
@@ -46,13 +47,56 @@ export default function ProductPage() {
   };
 
   const calculatePrice = (product: Product, quantity: number) => {
-    const isWholesale = quantity >= 6;
-    const unitPrice = isWholesale ? product.price.from_6 : product.price.single;
+    let unitPrice;
+    let discountLevel = "none"; // none, medium, high
+
+    if (quantity >= 80 && product.price.from_80) {
+      unitPrice = product.price.from_80;
+      discountLevel = "high";
+    } else if (quantity >= 8) {
+      unitPrice = product.price.from_8;
+      discountLevel = "medium";
+    } else {
+      unitPrice = product.price.single;
+      discountLevel = "none";
+    }
+
     return {
       unitPrice: Math.round(unitPrice),
       totalPrice: Math.round(unitPrice * quantity),
-      isWholesale,
+      discountLevel,
     };
+  };
+
+  const getDiscountInfo = (discountLevel: string, quantity: number) => {
+    switch (discountLevel) {
+      case "high":
+        return {
+          badge: dict?.product_page?.badge_max || "🔥 Мега знижка!",
+          badgeColor: "bg-gradient-to-r from-red-500 to-orange-500",
+          text:
+            dict?.product_page?.mega_discount ||
+            "Від 80 шт. - максимальна знижка!",
+          textColor: "text-red-600",
+        };
+      case "medium":
+        return {
+          badge: "🎉 Оптова знижка активна!",
+          badgeColor: "bg-[var(--color-burnt-orange)]",
+          text:
+            dict?.product_page?.wholesale_active || "🎉 Оптова знижка активна!",
+          textColor: "text-[var(--color-burnt-orange)]",
+        };
+      default:
+        return {
+          badge: null,
+          badgeColor: "",
+          text:
+            dict?.product_page?.text_discount ||
+            "Від 8 шт. - оптова ціна, від 80 шт. - максимальна знижка",
+          textColor: "text-[var(--color-forest-green)]/60",
+        };
+    }
   };
 
   const handleBuyClick = async () => {
@@ -60,40 +104,17 @@ export default function ProductPage() {
 
     setIsOrdering(true);
 
-    // try {
     const { totalPrice } = calculatePrice(product, quantity);
-    const lang = locale === "uk" ? "uk" : "ru"; // Перетворення локалі в формат ru/uk
+    const lang = locale === "uk" ? "uk" : "ru";
 
     console.log(
       `Замовлення: ${product.name[locale]}, Кількість: ${quantity}, Ціна: ${totalPrice} грн, Мова: ${lang}`
     );
-    // const response = await fetch("/api/send-telegram", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     productId: product.id,
-    //     amount: quantity,
-    //     price: totalPrice,
-    //     lang: lang,
-    //   }),
-    // });
 
-    // if (response.ok) {
-    //   // Якщо API відправив успішно, перенаправляємо на Telegram
     const telegramUrl = `https://t.me/CatsFreshBot?start=cats${product.idNumber}-${quantity}-${totalPrice}-${lang}shop`;
     window.open(telegramUrl, "_blank");
-    // } else {
-    //   console.error("Помилка при відправці замовлення");
-    //   // Можна додати показ помилки користувачу
-    // }
-    // } catch (error) {
-    //   console.error("Помилка при відправці замовлення:", error);
-    //   // Можна додати показ помилки користувачу
-    // } finally {
+
     setIsOrdering(false);
-    // }
   };
 
   if (loading) {
@@ -107,37 +128,31 @@ export default function ProductPage() {
   }
 
   if (!product || !dict) {
-    // return (
-    //   <div className="py-16 bg-gradient-to-b from-[var(--color-cream)] to-white">
-    //     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    //       {dict?.notFound.title || "Товар не знайдено"}
-    //     </div>
-    //   </div>
-    // );
     return <NotFound />;
   }
 
-  const { unitPrice, totalPrice, isWholesale } = calculatePrice(
+  const { unitPrice, totalPrice, discountLevel } = calculatePrice(
     product,
     quantity
   );
 
+  const discountInfo = getDiscountInfo(discountLevel, quantity);
   const productImages = getImagesForProduct(product.id);
 
   return (
     <section className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col lg:flex-row">
-          {/* Замінюємо одне зображення на галерею */}
           <div className="relative lg:w-1/2">
             <ImageGallery
               images={productImages}
               productName={product.name[locale]}
             />
-            {isWholesale && (
-              <div className="absolute top-4 right-4 bg-[var(--color-burnt-orange)] text-white px-3 py-1 rounded-full text-sm font-semibold z-20">
-                {dict?.product_page?.wholesale_active ||
-                  "🎉 Оптова знижка активна!"}
+            {discountInfo.badge && (
+              <div
+                className={`absolute top-4 right-4 ${discountInfo.badgeColor} text-white px-3 py-1 rounded-full text-sm font-semibold z-20 shadow-lg animate-pulse`}
+              >
+                {discountInfo.badge}
               </div>
             )}
           </div>
@@ -164,7 +179,48 @@ export default function ProductPage() {
                     -
                   </button>
                   <span className="text-lg font-semibold text-[var(--color-forest-green)] min-w-[2rem] text-center">
-                    {quantity}
+                    {editingQuantity ? (
+                      <input
+                        type="number"
+                        min={1}
+                        value={quantity === 0 ? "" : quantity}
+                        onChange={(e) => {
+                          const val =
+                            e.target.value === ""
+                              ? 0
+                              : parseInt(e.target.value, 10);
+                          setQuantity(isNaN(val) ? 0 : val);
+                        }}
+                        onBlur={() => {
+                          if (!quantity || quantity < 1) setQuantity(1);
+                          setEditingQuantity(false);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            if (!quantity || quantity < 1) setQuantity(1);
+                            setEditingQuantity(false);
+                          }
+                        }}
+                        autoFocus
+                        className="w-12 text-center bg-transparent border-b border-[var(--color-lime-green)] focus:outline-none focus:border-[var(--color-burnt-orange)] transition-colors"
+                        style={{ appearance: "textfield" }}
+                      />
+                    ) : (
+                      <span
+                        className="text-lg font-semibold text-[var(--color-forest-green)] min-w-[2rem] text-center cursor-pointer select-none"
+                        onClick={() => setEditingQuantity(true)}
+                        title="Змінити кількість"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ")
+                            setEditingQuantity(true);
+                        }}
+                        role="button"
+                        aria-label="Змінити кількість"
+                      >
+                        {quantity}
+                      </span>
+                    )}
                   </span>
                   <button
                     onClick={() => updateQuantity(quantity + 1)}
@@ -173,16 +229,22 @@ export default function ProductPage() {
                     +
                   </button>
                 </div>
-                <div className="text-xs text-[var(--color-forest-green)]/60 mt-1">
-                  {quantity >= 6
-                    ? dict?.product_page?.wholesale_active ||
-                      "🎉 Оптова знижка активна!"
-                    : dict?.product_page?.text_discount ||
-                      "Від 6 шт. - оптова ціна"}
+                <div
+                  className={`text-xs mt-1 font-medium ${discountInfo.textColor}`}
+                >
+                  {discountInfo.text}
                 </div>
               </div>
 
-              <div className="mb-8 p-4 bg-gradient-to-r from-[var(--color-lime-green)]/10 to-[var(--color-burnt-orange)]/10 rounded-lg">
+              <div
+                className={`mb-8 p-4 rounded-lg ${
+                  discountLevel === "high"
+                    ? "bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200"
+                    : discountLevel === "medium"
+                    ? "bg-gradient-to-r from-[var(--color-lime-green)]/10 to-[var(--color-burnt-orange)]/10"
+                    : "bg-gray-50"
+                }`}
+              >
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm text-[var(--color-forest-green)]">
                     {dict?.product_page?.price_per_unit || "Ціна за шт:"}
@@ -198,10 +260,34 @@ export default function ProductPage() {
                       quantity.toString()
                     ) || `Разом (${quantity} шт):`}
                   </span>
-                  <span className="text-xl font-bold text-[var(--color-burnt-orange)]">
+                  <span
+                    className={`text-xl font-bold ${
+                      discountLevel === "high"
+                        ? "text-red-600"
+                        : "text-[var(--color-burnt-orange)]"
+                    }`}
+                  >
                     {totalPrice} грн
                   </span>
                 </div>
+
+                {/* Додаткова інформація про економію */}
+                {/* {discountLevel !== "none" && (
+                  <div className="mt-2 pt-2 border-t border-gray-200">
+                    <div className="text-xs text-gray-600">
+                      {discountLevel === "high" && (
+                        <span className="text-red-600 font-semibold">
+                          💰 Максимальна економія! Найкраща ціна за шт.
+                        </span>
+                      )}
+                      {discountLevel === "medium" && (
+                        <span className="text-[var(--color-burnt-orange)] font-semibold">
+                          💡 Оптова ціна активна! Ще більша знижка від 80 шт.
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )} */}
               </div>
             </div>
 
